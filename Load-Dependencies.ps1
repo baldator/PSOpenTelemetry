@@ -34,7 +34,22 @@ param(
 
 # Set default package path if not provided
 if (-not $PackagePath) {
-    $PackagePath = Join-Path (Join-Path $env:HOME ".local/share") "PSOpenTelemetryPackages"
+    
+        if (-not (Test-Path -Path Variable:IsWindows)) {
+            $IsWindows = $false
+        }
+    if ([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform([System.Runtime.InteropServices.OSPlatform]::Windows)) {
+        Write-Host "Running on Windows" -ForegroundColor Cyan
+        $IsWindows = $true
+    } else {
+        Write-Host "Running on Linux or other Unix-like system" -ForegroundColor Cyan
+    }
+    
+    if ($IsWindows) {
+        $PackagePath = Join-Path (Join-Path $env:USERPROFILE "AppData\Local\PSOpenTelemetryPackages") "PSOpenTelemetryPackages"
+    } else {
+        $PackagePath = Join-Path (Join-Path $env:HOME ".local/share") "PSOpenTelemetryPackages"
+    }
 }
 
 # Create package directory if it doesn't exist
