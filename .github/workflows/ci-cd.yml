@@ -25,7 +25,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Setup PowerShell
-      uses: microsoft/setup-powershell@v1
+      uses: actions/setup-powershell@v5
       with:
         pwsh-version: ${{ matrix.powershell-version }}
     
@@ -110,7 +110,7 @@ jobs:
       uses: actions/checkout@v4
     
     - name: Setup PowerShell
-      uses: microsoft/setup-powershell@v1
+      uses: actions/setup-powershell@v5
       with:
         pwsh-version: '7.4.x'
     
