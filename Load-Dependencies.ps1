@@ -44,12 +44,11 @@ if (-not (Test-Path $PackagePath)) {
 
 # Define required packages and their versions
 $requiredPackages = @(
-    @{ Name = 'System.Diagnostics.DiagnosticSource'; Version = '8.0.0' },
-    @{ Name = 'OpenTelemetry'; Version = '1.9.0' },
-    @{ Name = 'OpenTelemetry.Exporter.OpenTelemetryProtocol'; Version = '1.9.0' },
-    @{ Name = 'Microsoft.Extensions.Logging'; Version = '8.0.0' },
-    @{ Name = 'Microsoft.Extensions.Logging.Abstractions'; Version = '8.0.0' },
-    @{ Name = 'Microsoft.Extensions.Logging.Console'; Version = '8.0.0' }
+    @{ Name = 'System.Diagnostics.DiagnosticSource'; Version = '10.0.2' },
+    @{ Name = 'OpenTelemetry.Exporter.OpenTelemetryProtocol'; Version = '1.15.0' },
+    @{ Name = 'Microsoft.Extensions.Logging'; Version = '10.0.2' },
+    @{ Name = 'Microsoft.Extensions.Logging.Abstractions'; Version = '10.0.2' },
+    @{ Name = 'Microsoft.Extensions.Logging.Console'; Version = '10.0.2' }
 )
 
 # Function to download NuGet package
@@ -60,10 +59,11 @@ function Download-NuGetPackage {
         [string]$TargetPath
     )
     
-    $nupkgUrl = "https://api.nuget.org/v3-flatcontainer/$PackageName/$Version/$PackageName.$Version.nupkg"
+    $nupkgUrl = "https://www.nuget.org/api/v2/package/$PackageName/$Version"
     $nupkgPath = Join-Path $TargetPath "$PackageName.$Version.nupkg"
     
     Write-Host "Downloading $PackageName version $Version..." -ForegroundColor Cyan
+    Write-Host "  from $nupkgUrl" -ForegroundColor Cyan
     
     try {
         # Use Invoke-WebRequest to download the package
@@ -181,13 +181,14 @@ foreach ($type in $criticalTypes) {
     try {
         $loaded = [System.Type]::GetType($type)
         if ($loaded) {
-            Write-Host "  ✓ $type" -ForegroundColor Green
+            Write-Host "  load ok $type" -ForegroundColor Green
         } else {
-            Write-Host "  ✗ $type" -ForegroundColor Red
+            Write-Host "  failed to load $type" -ForegroundColor Red
         }
     }
     catch {
-        Write-Host "  ✗ $type" -ForegroundColor Red
+        Write-Host "  failed to load $type" -ForegroundColor Red
+        Write-Host "    Exception: $($_.Exception.Message)" -ForegroundColor Red
     }
 }
 
