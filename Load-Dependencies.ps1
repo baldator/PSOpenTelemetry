@@ -34,7 +34,7 @@ param(
 
 # Set default package path if not provided
 if (-not $PackagePath) {
-    $PackagePath = Join-Path $env:TEMP "PSOpenTelemetryPackages"
+    $PackagePath = Join-Path (Join-Path $env:HOME ".local/share") "PSOpenTelemetryPackages"
 }
 
 # Create package directory if it doesn't exist
